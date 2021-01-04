@@ -1,7 +1,7 @@
 Powerup = Class{}
 
 function Powerup:init(brick)
-    self.type = math.random(1, 2) == 1  -- 1 == 'balls'; 2 == 'key'
+    self.type = math.random(1, 2)  -- 1 == 'balls'; 2 == 'key'
     
     self.width = 16
     self.height = 16
@@ -22,17 +22,17 @@ end
 
 function Powerup:render()
     if not self.remove then
-        love.graphics.draw(gTextures['main'], gFrames['powerups'][1], self.x, self.y)
+        love.graphics.draw(gTextures['main'], gFrames['powerups'][self.type], self.x, self.y)
     end
 end
 
 --------------------------------------------------------------------------
 function Powerup:collides(target)
-    if self.y + self.height < target.y and self.y > target.y + target.height then
+    if self.y + self.height < target.y or self.y > target.y + target.height then
         return false
     end
 
-    if self.x < target.x and self.x > target.x + target.width then
+    if self.x + self.width < target.x or self.x > target.x + target.width then
         return false
     end
 

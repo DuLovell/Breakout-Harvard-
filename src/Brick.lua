@@ -50,6 +50,7 @@ paletteColors = {
     }
 }
 
+
 function Brick:init(x, y)
     -- used for coloring and score calculation
     self.tier = 0
@@ -59,6 +60,9 @@ function Brick:init(x, y)
     self.y = y
     self.width = 32
     self.height = 16
+
+    self.powerupSwitcher = false
+    self.powerup = math.random(2) == 1 and Powerup(self) or nil
     
     -- used to determine whether this brick should be rendered
     self.inPlay = true
@@ -117,6 +121,7 @@ function Brick:hit()
         -- if we're in the first tier and the base color, remove brick from play
         if self.color == 1 then
             self.inPlay = false
+            self.powerupSwitcher = true
         else
             self.color = self.color - 1
         end
@@ -130,6 +135,10 @@ function Brick:hit()
 end
 
 function Brick:update(dt)
+    if self.powerup and self.powerupSwitcher then
+        self.powerup:update(dt)
+    end
+
     self.psystem:update(dt)
 end
 
@@ -140,6 +149,10 @@ function Brick:render()
             -- to draw the correct tier and color brick onto the screen
             gFrames['bricks'][1 + ((self.color - 1) * 4) + self.tier],
             self.x, self.y)
+    end
+
+    if self.powerup  then
+        self.powerup:render()
     end
 end
 

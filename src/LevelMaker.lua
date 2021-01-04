@@ -32,7 +32,6 @@ LevelMaker = Class{}
 ]]
 function LevelMaker.createMap(level)
     local bricks = {}
-    local powerups = {}
 
     -- randomly choose the number of rows
     local numRows = math.random(1, 5)
@@ -114,7 +113,6 @@ function LevelMaker.createMap(level)
             end 
 
             table.insert(bricks, b)
-            table.insert(powerups, Powerup(b))
 
             -- Lua's version of the 'continue' statement
             ::continue::
@@ -125,6 +123,6 @@ function LevelMaker.createMap(level)
     if #bricks == 0 then
         return self.createMap(level)
     else
-        return {bricks, powerups}
+        return bricks
     end
 end

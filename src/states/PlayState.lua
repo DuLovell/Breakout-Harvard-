@@ -23,7 +23,6 @@ PlayState = Class{__includes = BaseState}
 function PlayState:enter(params)
     self.paddle = params.paddle
     self.bricks = params.bricks
-    self.powerups = params.powerups
     self.health = params.health
     self.score = params.score
     self.highScores = params.highScores
@@ -179,7 +178,6 @@ function PlayState:update(dt)
             gStateMachine:change('serve', {
                 paddle = self.paddle,
                 bricks = self.bricks,
-                powerups = self.powerups,
                 health = self.health,
                 score = self.score,
                 highScores = self.highScores,
@@ -193,17 +191,18 @@ function PlayState:update(dt)
     -- for rendering particle systems
     for k, brick in pairs(self.bricks) do
         brick:update(dt)
+
+        if brick.powerup and brick.powerup:collides(self.paddle) then
+            brick.powerup.remove = true
+        end
+
+
+        if brick.powerup and brick.powerupSwitcher then
+            brick.powerup:update(dt)
+        end
     end
     
 
-    for k, powerup in ipairs(self.powerups) do
-
-        if powerup:collides(self.paddle) then
-            powerup.remove = true
-        end
-
-        powerup:update(dt)
-    end
 
     if love.keyboard.wasPressed('escape') then
         love.event.quit()
@@ -221,9 +220,6 @@ function PlayState:render()
         brick:renderParticles()
     end
 
-    for k, powerup in pairs(self.powerups) do
-        powerup:render()
-    end
 
     self.paddle:render()
     self.ball:render()

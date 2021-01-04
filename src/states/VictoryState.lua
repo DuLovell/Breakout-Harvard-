@@ -35,8 +35,7 @@ function VictoryState:update(dt)
         local levelMap = LevelMaker.createMap(self.level + 1)
         gStateMachine:change('serve', {
             level = self.level + 1,
-            bricks = levelMap[1],
-            powerups = levelMap[2],
+            bricks = levelMap,
             paddle = self.paddle,
             health = self.health,
             score = self.score,

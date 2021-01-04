@@ -20,7 +20,6 @@ function ServeState:enter(params)
     -- grab game state from params
     self.paddle = params.paddle
     self.bricks = params.bricks
-    self.powerups = params.powerups
     self.health = params.health
     self.score = params.score
     self.highScores = params.highScores
@@ -43,7 +42,6 @@ function ServeState:update(dt)
         gStateMachine:change('play', {
             paddle = self.paddle,
             bricks = self.bricks,
-            powerups = self.powerups,
             health = self.health,
             score = self.score,
             highScores = self.highScores,
