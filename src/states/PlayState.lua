@@ -143,7 +143,7 @@ function PlayState:update(dt)
             if brick.powerup.type == 1 then
                 self.extraBalls = PlayState:addBalls(self.ball)
             else
-                self.blocks = PlayState:unlockBlock(self.blocks)
+                self.blocks = PlayState:unlockBlock(self.bricks)
             end
 
             brick.powerup.remove = true
@@ -216,14 +216,14 @@ function PlayState:addBalls(ball)
     return extraBalls
 end
 
-function PlayState:unlockBlock(blocks)
-    for k, block in pairs(blocks) do
-        if block.blocked then
-            block.blocked = false
+function PlayState:unlockBlock(bricks)
+    for k, brick in pairs(bricks) do
+        if brick.blocked then
+            brick.blocked = false
         end
     end
 
-    return blocks
+    return bricks
 end
 
 function PlayState:checkVictory()
@@ -262,8 +262,10 @@ end
 
 function PlayState:bricksCollides(brick, ball, playStateObjects)
     -- add to score
-    playStateObjects.score = playStateObjects.score + (brick.tier * 200 + brick.color * 25)
-
+    if not brick.blocked then
+        playStateObjects.score = playStateObjects.score + (brick.tier * 200 + brick.color * 25)
+    end
+    
     -- trigger the brick's hit function, which removes it from play
     brick:hit()
 
