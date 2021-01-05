@@ -29,6 +29,8 @@ function ServeState:enter(params)
     -- init new ball (random color for fun)
     self.ball = Ball()
     self.ball.skin = math.random(7)
+
+    self.counter = params.counter
 end
 
 function ServeState:update(dt)
@@ -43,6 +45,7 @@ function ServeState:update(dt)
             paddle = self.paddle,
             bricks = self.bricks,
             health = self.health,
+            counter = self.counter,
             score = self.score,
             highScores = self.highScores,
             ball = self.ball,

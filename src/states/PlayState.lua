@@ -34,6 +34,8 @@ function PlayState:enter(params)
     -- give ball random starting velocity
     self.ball.dx = math.random(-200, 200)
     self.ball.dy = math.random(-50, -60)
+
+    self.counter = params.counter or 0
 end
 
 function PlayState:update(dt)
@@ -53,6 +55,14 @@ function PlayState:update(dt)
     -- update positions based on velocity
     self.paddle:update(dt)
     self.ball:update(dt)
+
+    if self.score - self.counter * 1000 >= 1000 then
+        if self.paddle.size < 4 then
+            self.paddle.size = self.paddle.size + 1
+            self.paddle.width = self.paddle.width + 32
+        end
+        self.counter = self.counter + 1
+    end
 
     if self.ball:collides(self.paddle)  then
         ballAndPaddle =  PlayState:paddleCollides(self.ball, self.paddle)
@@ -113,6 +123,8 @@ function PlayState:update(dt)
     -- if ball goes below bounds, revert to serve state and decrease health
     if self.ball.y >= VIRTUAL_HEIGHT then
         self.health = self.health - 1
+        self.paddle.size = 1
+        self.paddle.width = 32
         gSounds['hurt']:play()
 
         if self.health == 0 then
@@ -125,6 +137,7 @@ function PlayState:update(dt)
                 paddle = self.paddle,
                 bricks = self.bricks,
                 health = self.health,
+                counter = self.counter,
                 score = self.score,
                 highScores = self.highScores,
                 level = self.level,
@@ -265,7 +278,7 @@ function PlayState:bricksCollides(brick, ball, playStateObjects)
     if not brick.blocked then
         playStateObjects.score = playStateObjects.score + (brick.tier * 200 + brick.color * 25)
     end
-    
+
     -- trigger the brick's hit function, which removes it from play
     brick:hit()
 
