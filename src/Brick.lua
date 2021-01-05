@@ -162,7 +162,7 @@ function Brick:render()
         love.graphics.draw(gTextures['main'], gFrames['bricks'][22], self.x, self.y)
     end
 
-    if self.powerup then              -- and self.powerupSwitcher
+    if self.powerup and self.powerupSwitcher then
         self.powerup:render()
     end
 end
