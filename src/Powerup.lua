@@ -1,7 +1,7 @@
 Powerup = Class{}
 
 function Powerup:init(brick)
-    self.type = math.random(1, 2)  -- 1 == 'balls'; 2 == 'key'
+    self.type = math.random(7) <= 5 and 1 or 2  -- 1 == 'balls'; 2 == 'key'  шансов на спавн синего усиления больше
     
     self.width = 16
     self.height = 16
@@ -37,12 +37,4 @@ function Powerup:collides(target)
     end
 
     return true
-end
-
-function Powerup:addBalls()
-
-end
-
-function Powerup:grabKey()
-
 end

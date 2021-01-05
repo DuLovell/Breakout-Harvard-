@@ -120,9 +120,53 @@ function LevelMaker.createMap(level)
     end 
 
     -- in the event we didn't generate any bricks, try again
+    local isAnyBrickBlocked = false
+    local isAnyExtraBalls = false
+    local isAnyKeys = false
+
+    for k, brick in pairs(bricks) do
+        
+        if brick.inPlay and brick.powerup then
+            if (brick.powerup.type == 1 and isAnyExtraBalls) or (brick.powerup.type == 2 and isAnyKeys) then
+                brick.powerup = nil
+            end
+        end
+
+        if brick.inPlay and brick.powerup then
+            if brick.powerup.type == 1 then
+                isAnyExtraBalls = true
+            else
+                isAnyKeys = true
+            end
+        end
+
+        if brick.inPlay and brick.blocked then
+            isAnyBrickBlocked = true
+        end
+
+    end
+
+    for k, brick in pairs(bricks) do
+        if brick.inPlay and not brick.blocked and isAnyBrickBlocked and not isAnyKeys then
+            
+            if not brick.powerup then
+                brick.powerup = Powerup(brick)
+                brick.powerup.type = 2
+            else
+                brick.powerup.type = 2
+            end
+
+            isAnyBrickBlocked = false
+        end
+    end
+
+
     if #bricks == 0 then
         return self.createMap(level)
     else
         return bricks
     end
+
+
+
 end
